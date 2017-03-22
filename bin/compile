@@ -177,23 +177,16 @@ npm prune 2>&1 | indent
 
 status "Installing dependencies"
 # Make npm output to STDOUT instead of its default STDERR
-npm install --quiet --no-optional --userconfig $build_dir/.npmrc 2>&1 | indent
-
-PATH=$build_dir/node_modules/.bin:$PATH
-
-if type bower > /dev/null 2>&1 || test -e $build_dir/node_modules/bower/bin/bower; then
-  status "Bower already exists"
-else
-  status "Installing bower which is required by other dependencies"
-  npm install bower --save-dev --quiet --no-optional --userconfig $build_dir/.npmrc 2>&1 | indent
+if [[ ! -f $build_dir/node_modules/yarn/bin/yarn ]]; then
+  npm install yarn
 fi
 
+PATH=$build_dir/node_modules/.bin:$PATH
 PATH=$build_dir/node_modules/bower/bin:$PATH
+PATH=$build_dir/node_modules/yarn/bin:$PATH
 
-status "Pruning cached bower dependencies not specified in bower.json"
-bower prune 2>&1 | indent
-
-bower install --quiet | indent
+yarn --ignore-engines
+yarn run bower install -- --allow-root
 
 # Add the project's and ember-cli's dependencies' binaries to the PATH
 PATH=$build_dir/node_modules/.bin:$build_dir/node_modules/ember-cli/node_modules/.bin:$PATH
