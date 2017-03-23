@@ -173,6 +173,7 @@ fi
 status "Installing dependencies"
 # Make npm output to STDOUT instead of its default STDERR
 if [[ ! -f $HOME/.yarn/bin/yarn ]]; then
+  touch ~/.bashrc
   curl -o- -L https://yarnpkg.com/install.sh | bash
 fi
 
