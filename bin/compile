@@ -117,8 +117,8 @@ if [ "$REBUILD_ALL" == "true" ] || [ "$REBUILD_BOWER_PACKAGES" == "true" ]; then
   rm -rf $build_dir/bower_components $cache_dir/bower_components
 fi
 
-If node_modules directory is checked into source control then
-rebuild any native deps. Otherwise, restore from the build cache.
+# If node_modules directory is checked into source control then
+# rebuild any native deps. Otherwise, restore from the build cache.
 if test -d $build_dir/node_modules; then
   status "Found existing node_modules directory; skipping cache"
   status "Rebuilding any native dependencies"
