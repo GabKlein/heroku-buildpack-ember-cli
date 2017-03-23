@@ -177,7 +177,8 @@ if [[ ! -f $HOME/.yarn/bin/yarn ]]; then
   curl -o- -L https://yarnpkg.com/install.sh | bash
 fi
 
-# PATH=$build_dir/node_modules/.bin:$PATH
+PATH="$HOME/.yarn/bin:$PATH"
+PATH=$build_dir/node_modules/.bin:$PATH
 # PATH=$build_dir/node_modules/bower/bin:$PATH
 # PATH=$build_dir/node_modules/yarn/bin:$PATH
 
