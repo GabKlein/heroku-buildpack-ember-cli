@@ -117,41 +117,41 @@ if [ "$REBUILD_ALL" == "true" ] || [ "$REBUILD_BOWER_PACKAGES" == "true" ]; then
   rm -rf $build_dir/bower_components $cache_dir/bower_components
 fi
 
-# If node_modules directory is checked into source control then
-# rebuild any native deps. Otherwise, restore from the build cache.
-# if test -d $build_dir/node_modules; then
-#   status "Found existing node_modules directory; skipping cache"
-#   status "Rebuilding any native dependencies"
-#   npm rebuild 2>&1 | indent
-# else
-#   if test -d $cache_dir/node_modules; then
-#     status "Restoring node_modules directory from cache"
-#   else
-#     status "Creating node_modules cache directory"
-#     mkdir -p $cache_dir/node_modules
-#   fi
+If node_modules directory is checked into source control then
+rebuild any native deps. Otherwise, restore from the build cache.
+if test -d $build_dir/node_modules; then
+  status "Found existing node_modules directory; skipping cache"
+  status "Rebuilding any native dependencies"
+  npm rebuild 2>&1 | indent
+else
+  if test -d $cache_dir/node_modules; then
+    status "Restoring node_modules directory from cache"
+  else
+    status "Creating node_modules cache directory"
+    mkdir -p $cache_dir/node_modules
+  fi
 
-#   ln -s $cache_dir/node_modules $build_dir/node_modules
+  ln -s $cache_dir/node_modules $build_dir/node_modules
 
-#   if test -f $cache_dir/.heroku/node-version && [ $(cat $cache_dir/.heroku/node-version) != "$node_version" ]; then
-#     status "Node version changed since last build; rebuilding dependencies"
-#     npm rebuild 2>&1 | indent
-#   fi
-# fi
+  if test -f $cache_dir/.heroku/node-version && [ $(cat $cache_dir/.heroku/node-version) != "$node_version" ]; then
+    status "Node version changed since last build; rebuilding dependencies"
+    npm rebuild 2>&1 | indent
+  fi
+fi
 
-# # Restore bower_components from cache if it exists
-# if test -d $build_dir/bower_components; then
-#   status "Found existing bower_components directory; skipping cache"
-# else
-#   if test -d $cache_dir/bower_components; then
-#     status "Restoring bower_components directory from cache"
-#   else
-#     status "Creating bower_components cache directory"
-#     mkdir -p $cache_dir/bower_components
-#   fi
+# Restore bower_components from cache if it exists
+if test -d $build_dir/bower_components; then
+  status "Found existing bower_components directory; skipping cache"
+else
+  if test -d $cache_dir/bower_components; then
+    status "Restoring bower_components directory from cache"
+  else
+    status "Creating bower_components cache directory"
+    mkdir -p $cache_dir/bower_components
+  fi
 
-#   ln -s $cache_dir/bower_components $build_dir/bower_components
-# fi
+  ln -s $cache_dir/bower_components $build_dir/bower_components
+fi
 
 if [ "$GIT_SSH_KEY" != "" ]; then
   status "Detected SSH key for git.  launching ssh-agent and loading key"
@@ -172,13 +172,13 @@ fi
 
 status "Installing dependencies"
 # Make npm output to STDOUT instead of its default STDERR
-if [[ ! -f $build_dir/node_modules/yarn/bin/yarn ]]; then
-  npm install yarn
+if [[ ! -f $HOME/.yarn/bin/yarn ]]; then
+  curl -o- -L https://yarnpkg.com/install.sh | bash
 fi
 
-PATH=$build_dir/node_modules/.bin:$PATH
-PATH=$build_dir/node_modules/bower/bin:$PATH
-PATH=$build_dir/node_modules/yarn/bin:$PATH
+# PATH=$build_dir/node_modules/.bin:$PATH
+# PATH=$build_dir/node_modules/bower/bin:$PATH
+# PATH=$build_dir/node_modules/yarn/bin:$PATH
 
 yarn --ignore-engines
 yarn run bower install -- --allow-root
